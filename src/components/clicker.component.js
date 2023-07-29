@@ -3,6 +3,7 @@ import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { BACKEND_IP, BACKEND_PORT } from '../settings';
 
 export default function Clicker() {
     const [username, setUsername] = useState('');
@@ -10,9 +11,9 @@ export default function Clicker() {
     const [inputUsername, setInputUsername] = useState('');
 
     function incrementClick(e) {
-        if (username !== '') {
+        if (username !== '' && username === inputUsername) {
             setClicks(clicks + 1);
-            axios.post('http://10.38.155.115:5140/clicker/add', {username: username, clicks: clicks});
+            axios.post(`http://${BACKEND_IP}:${BACKEND_PORT}/clicker/add`, {username: username, clicks: clicks});
         }
         else {
             if (inputUsername === ''){
@@ -33,21 +34,23 @@ export default function Clicker() {
             alert("Username cannot be empty!");
             return;
         }
-        axios.get(`http://10.38.155.115:5140/clicker/${inputUsername}`)
+        axios.get(`http://${BACKEND_IP}:${BACKEND_PORT}/clicker/${inputUsername}`)
           .then(res => {
             if (res.data.username) {
                 setUsername(res.data.username);
                 setClicks(res.data.clicks);
                 alert('User loaded successfully!');
             }
-            else {
-                axios.post('http://10.38.155.115:5140/clicker/add', {username: inputUsername, clicks: 0})
-                  .then(res => {
-                    alert(res.data);
-                  })
-            }
           })
-          .catch(err => alert(`No such user ${e.target.value}, err: ${err}`));
+          .catch(err => {
+            axios.post(`http://${BACKEND_IP}:${BACKEND_PORT}/clicker/add`, {username: inputUsername, clicks: 0})
+              .then(res => {
+                setUsername(inputUsername);
+                setClicks(0);
+                alert("User created successfully!");
+              })
+              .catch(err => alert(`No such user ${inputUsername} and cannot create user, err: ${err}`));
+          });
     }
 
     return(
