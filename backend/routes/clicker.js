@@ -2,10 +2,29 @@ const router = require('express').Router();
 let clickerData = require('../models/clicker-data.model');
 
 router.get('/', (req, res) => {
-    console.log("Received get request");
-    clickerData.find()
-      .then(clickerDatas => res.json(clickerDatas))
-      .catch(err => res.status(400).json("Error: " + err));
+  console.log("Received general GET request");
+  clickerData.find()
+    .then(clickerDatas => res.json(clickerDatas))
+    .catch(err => res.status(400).json("Error: " + err));
+});
+
+router.get('/:username', (req, res) => {
+  console.log("Received directed GET request");
+  console.log(req.body);
+  const username = req.params.username;
+  if (username) {
+    console.log(username);
+    clickerData.find( {username: username} )
+      .then(entries => {
+        if (entries.length > 0) {
+          res.json(entries[0]);
+        }
+        else{
+          res.status(400).json(`No such user: ${username}`);
+        }
+      })
+      .catch(err => res.status(400).json(`Error when getting user ${username}: ${err}`));
+  }
 });
 
 router.post('/add', (req, res) => {

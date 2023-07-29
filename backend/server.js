@@ -23,7 +23,5 @@ const clickerRouter = require('./routes/clicker');
 
 app.use('/clicker', clickerRouter);
 
-app.get('/', (req, res) => res.send("Hello World!"));
-
 const server = http.createServer(app);
-app.listen(port, () => console.log("Server running"));
+app.listen(port, () => console.log("Server running on port " + port));
