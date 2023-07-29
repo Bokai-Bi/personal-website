@@ -12,8 +12,8 @@ export default function Clicker() {
 
     function incrementClick(e) {
         if (username !== '' && username === inputUsername) {
+            axios.post(`http://${BACKEND_IP}:${BACKEND_PORT}/clicker/add`, {username: username, clicks: clicks + 1});
             setClicks(clicks + 1);
-            axios.post(`http://${BACKEND_IP}:${BACKEND_PORT}/clicker/add`, {username: username, clicks: clicks});
         }
         else {
             if (inputUsername === ''){
