@@ -1,15 +1,15 @@
 import Footer from "../components/footer.tsx";
 import Header from "../components/header.tsx";
-import NotFound from "../components/notfound.tsx";
+import KoishiNotFound from "../components/koishinotfound.tsx";
 
-const Error = () => {
+const KoishiError = () => {
   return (
     <div className="w-screen h-screen flex flex-col">
       <Header />
-      <NotFound />
+      <KoishiNotFound />
       <Footer />
     </div>
   );
 };
 
-export default Error;
+export default KoishiError;
